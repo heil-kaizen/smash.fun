@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MEME SMASH — Onchain Brawler</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="frame">
+    <canvas id="game" width="960" height="540"></canvas>
+
+    <div id="topbar">
+      <button id="helpBtn" title="Controls">? CONTROLS</button>
+      <button id="fsBtn" title="Fullscreen">⛶ FULLSCREEN</button>
+    </div>
+
+    <div id="controls" class="hidden">
+      <div class="col">
+        <h3>PLAYER 1</h3>
+        <p><b>WASD</b> move/jump · <b>S</b> drop/fast-fall</p>
+        <p><b>F</b> light · <b>G</b> smash · <b>H</b> special · <b>R</b> shield</p>
+      </div>
+      <div class="col">
+        <h3>PLAYER 2</h3>
+        <p><b>Arrows</b> move/jump · <b>↓</b> drop/fast-fall</p>
+        <p><b>.</b> light · <b>/</b> smash · <b>,</b> special · <b>R-Shift</b> shield</p>
+      </div>
+      <div class="col">
+        <h3>RULES</h3>
+        <p>Rack up <b>%</b> then knock foes past the blast zone.</p>
+        <p>Last fighter with stocks wins. <b>ESC</b> = menu.</p>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

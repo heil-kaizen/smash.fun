@@ -1,0 +1,96 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(180deg, #aee3fb 0%, #d8f1ff 55%, #eafbe7 100%);
+  color: #1d3a8a;
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+}
+
+/* full-viewport stage; canvas scales to fill while keeping 16:9 */
+#frame {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#game {
+  /* largest 16:9 box that fits both the width and height of the viewport */
+  width: min(100vw, 177.78vh);
+  height: min(56.25vw, 100vh);
+  background: #aeddf7;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  outline: none;
+  box-shadow: 0 0 60px rgba(79, 174, 62, 0.25);
+}
+
+/* corner buttons */
+#topbar {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+#topbar button {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #1d3a8a;
+  background: rgba(255, 255, 255, 0.78);
+  border: 2px solid #4fae3e;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+#topbar button:hover { background: #fff; }
+#topbar button:active { transform: translateY(1px); }
+
+/* controls overlay (toggled) */
+#controls {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 94vw;
+  font-size: 12px;
+  color: #3a4a6b;
+  z-index: 10;
+}
+#controls.hidden { display: none; }
+
+#controls .col {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(79, 174, 62, 0.5);
+  border-radius: 6px;
+  padding: 10px 14px;
+  min-width: 220px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+#controls h3 {
+  color: #e8632e;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+#controls p { margin: 3px 0; line-height: 1.4; }
+#controls b { color: #1f8a4c; }
+
+/* hide chrome while in browser fullscreen for a cleaner look */
+:fullscreen #topbar button { opacity: 0.5; }
+:fullscreen #topbar button:hover { opacity: 1; }
