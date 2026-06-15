@@ -148,6 +148,7 @@ export const CHARACTERS = [
     id: 'troll', name: 'TROLL',
     palette: { body: '#f2f2f2', accent: '#cfcfcf', eye: '#1a1a1a', trim: '#1a1a1a' },
     weight: 96, speedMult: 1.05, jumpMult: 1.0, dmgMult: 0.96, special: 'projectile',
+    sprite: 'https://raw.githubusercontent.com/heil-kaizen/assets-for-smashfun/main/Troll-sprite.webp',
     blurb: 'Problem?',
   }),
   mk({

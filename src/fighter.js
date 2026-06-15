@@ -208,6 +208,10 @@ export class Fighter {
 
     // -- attacks --
     if (controllable && !this.shielding && !attacking) {
+      // Ensure facing is set towards movement direction or maintain current facing
+      if (intent.moveX !== 0) {
+        this.facing = intent.moveX > 0 ? 1 : -1;
+      }
       if (intent.light) {
         this.startAttack(this.onGround ? ATTACKS.jab : ATTACKS.air, world);
       } else if (intent.heavy) {
@@ -347,7 +351,13 @@ export class Fighter {
 
     const px = Math.round(this.x);
     const py = Math.round(this.y);
-    this.drawPlaceholder(ctx, px, py);
+    
+    // Draw sprite sheet animation if character has one
+    if (this.char.sprite) {
+      this.drawSprite(ctx, px, py);
+    } else {
+      this.drawPlaceholder(ctx, px, py);
+    }
 
     // attack arm / swoosh
     if (this.attack) {
@@ -439,6 +449,60 @@ export class Fighter {
     const step = this.onGround && Math.abs(this.vx) > 0.4 ? Math.sin(this.anim) * 3 : 0;
     ctx.fillRect(px + 6, py + h - 6, 7, 6 + step);
     ctx.fillRect(px + w - 13, py + h - 6, 7, 6 - step);
+  }
+
+  drawSprite(ctx, px, py) {
+    if (!this._spriteImg) {
+      this._spriteImg = new Image();
+      this._spriteImg.src = this.char.sprite;
+      this._spriteLoaded = false;
+      this._spriteImg.onload = () => { this._spriteLoaded = true; };
+    }
+    if (!this._spriteLoaded) {
+      this.drawPlaceholder(ctx, px, py);
+      return;
+    }
+
+    const w = this.w, h = this.h;
+    const f = this.facing;
+    
+    // Determine animation state
+    const attacking = this.attack && this.attack.timer < this.attack.def.startup + this.attack.def.active + this.attack.def.recovery;
+    const idleFrame = 0;
+    const walkFrame = Math.floor(this.anim / 6) % 4;
+    const attackFrame = Math.floor((this.attack ? this.attack.timer : 0) / 4) % 4;
+    
+    let frameX = idleFrame;
+    let row = 0; // idle row
+    
+    if (attacking) {
+      frameX = attackFrame;
+      row = 1; // attack row
+    } else if (this.onGround && Math.abs(this.vx) > 0.4) {
+      frameX = walkFrame;
+      row = 2; // walk row
+    } else if (!this.onGround) {
+      row = 3; // jump/fall row
+    }
+    
+    // Sprite sheet assumed format: 4 columns x 4 rows, each cell is spriteW x spriteH
+    const spriteW = 64;
+    const spriteH = 64;
+    const totalRows = 4;
+    
+    const sx = frameX * spriteW;
+    const sy = row * spriteH;
+    
+    ctx.save();
+    // Flip horizontally based on facing direction
+    if (f < 0) {
+      ctx.translate(px + w, py);
+      ctx.scale(-1, 1);
+      ctx.drawImage(this._spriteImg, sx, sy, spriteW, spriteH, 0, 0, w, h);
+    } else {
+      ctx.drawImage(this._spriteImg, sx, sy, spriteW, spriteH, px, py, w, h);
+    }
+    ctx.restore();
   }
 }
 
