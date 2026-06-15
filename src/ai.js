@@ -52,10 +52,16 @@ export class AIController {
       // in range — maybe back off a touch sometimes
       if (Math.random() < 0.02) intent.moveX = dx > 0 ? -1 : 1;
     }
-    f.facing; // face handled by movement; ensure facing target when attacking
+    // face the target when attacking or in range
     if (adx <= desiredGap) {
+      f.facing = dx > 0 ? 1 : -1;
       // face the target even if not moving
       intent.moveX = intent.moveX || (dx > 0 ? 0.0001 : -0.0001);
+    }
+
+    // Ensure facing is set before any attack decision
+    if (!intent.moveX && adx <= desiredGap) {
+      f.facing = dx > 0 ? 1 : -1;
     }
 
     // jump if target is clearly above, or to platform
